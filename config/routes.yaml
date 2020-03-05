@@ -1,0 +1,21 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+auth_login:
+  path: /auth/login
+  methods:  [POST]
+
+api:
+  prefix: /
+  resource: '../src/Controller/Api'
+
+file:
+  resource: '../src/Controller'
+
+open:
+  prefix: /open
+  resource: '../src/Controller/Api/Open'
+
+secure:
+  prefix: /secure
+  resource: '../src/Controller/Api/Secure'
