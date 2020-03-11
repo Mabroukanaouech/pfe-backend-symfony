@@ -31,6 +31,12 @@ class Publicity
      */
     private $audience;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Doctrine\Entity\Category", inversedBy="publicities")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +74,18 @@ class Publicity
     public function setAudience(?string $audience): self
     {
         $this->audience = $audience;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
