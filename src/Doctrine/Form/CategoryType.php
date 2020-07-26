@@ -1,30 +1,25 @@
 <?php
 
-namespace App\Form;
+namespace App\Doctrine\Form;
 
-use App\Doctrine\Entity\Publicity;
-use Doctrine\DBAL\Types\TextType;
+use App\Doctrine\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PublicityType extends AbstractType
+class CategoryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name',TextType::class,['required'=>true])
-            ->add('description')
-            ->add('audience')
+            ->add('name')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Place::class,
-            'allow_extra_fields' => true,
-            'csrf_protection' => false
+            'data_class' => Category::class,
         ]);
     }
 }

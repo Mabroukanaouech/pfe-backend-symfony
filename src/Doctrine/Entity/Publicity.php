@@ -2,6 +2,8 @@
 
 namespace App\Doctrine\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,7 +19,7 @@ class Publicity
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(name="name",type="string", length=255)
      */
     private $name;
 
@@ -37,6 +39,18 @@ class Publicity
      */
     private $category;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $image;
+ 
+  
+
+    public function __construct()
+    {
+        $this->gallery = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -47,6 +61,11 @@ class Publicity
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return $this
+     *
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -89,4 +108,19 @@ class Publicity
 
         return $this;
     }
+
+   /**
+ * @inheritdoc
+ */
+public function getImage()
+{
+    return $this->image;
+}
+/**
+ * @inheritdoc
+ */
+public function setImage($image)
+{
+    $this->image = $image;
+}
 }
