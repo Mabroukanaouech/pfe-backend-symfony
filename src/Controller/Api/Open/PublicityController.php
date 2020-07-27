@@ -14,22 +14,43 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use App\Doctrine\Repository\UserRepository;
+use FOS\UserBundle\Model\UserManagerInterface;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Validator\Validation;
 /**
  * @Route("/publicity")
  */
 class PublicityController extends AbstractController
 {
-    /**
+       /**
      * @Route("/", name="publicity_index", methods={"GET"})
+     * @param PublicityRepository $publicityRepository
+     * @return JsonResponse|RedirectResponse
      */
-    public function index(PublicityRepository $publicityRepository): Response
-    {
-        return $this->render('publicity/index.html.twig', [
-            'publicities' => $publicityRepository->findAll(),
-        ]);
-    }
+public function index(PublicityRepository $publicityRepository): Response
+{
+    //AnnonceRepository $annonceRepository
+//        return $this->render('annonce/index.html.twig', [
+//            'annonces' => $annonceRepository->findAll(),
+//        ]);
+    $publicitys = $this->getDoctrine()->getRepository(Publicity::class)->findAll();
+    $encoders = [new JsonEncoder()];
+    $normalizers = [new DateTimeNormalizer(),new ObjectNormalizer()];
+    $serializer = new Serializer($normalizers, $encoders);
+    $jsonContent = $serializer->serialize($publicitys, 'json'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ,[
+        'circular_reference_handler' => function ($object) {
+            return $object->getId();
+        }
+    ]);
+    $response = new Response($jsonContent);
+    $response->headers->set('Content-Type', 'application/json');
+    return $response;
+}
 
     /**
      * @Route("/new", name="publicity_new", methods={"POST"})
@@ -105,9 +126,12 @@ class PublicityController extends AbstractController
         ]);*/
     }
 
-    /**
+/**
      * @Route("/{id}", name="publicity_show", methods={"GET"})
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
      */
+
     public function show(Request $request): Response
     {
         $publicity = $this->getDoctrine()->getRepository(Publicity::class)->find($request->get('id'));
