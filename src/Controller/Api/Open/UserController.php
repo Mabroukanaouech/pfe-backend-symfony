@@ -15,7 +15,8 @@ use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validation;
-
+use App\Doctrine\Form\UserType;
+//use App\Doctrine\Form
  /**
      * @Route("/user", name="user")
      */
@@ -64,7 +65,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="user_edit", methods={"PUT"})
      */
     public function edit(Request $request, User $user): Response
     {
@@ -73,14 +74,11 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('user_index');
+            return new Response('edit ok');
+           // return $this->redirectToRoute('user_index');
         }
 
-        return $this->render('user/edit.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
+        
     }
 
     /**
